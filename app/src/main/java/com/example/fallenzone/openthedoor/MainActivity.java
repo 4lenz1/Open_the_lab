@@ -99,8 +99,8 @@ public class MainActivity extends ActionBarActivity {
             public void onProgressChanged(WebView view, int progress) {
                 Log.v("Progress", Integer.toString(progress));
                 if (progress == 100) {
-                    txtUrl.setText( webView.getUrl());
-                    if (ctrlLock == true){
+                    txtUrl.setText(webView.getUrl());
+                    if (ctrlLock) {
                         if (webView.getUrl().equals("http://163.25.117.185/OGWeb/LoginForm.aspx?ReturnUrl=%2fOGWeb%2fOGWebGuard%2fOGDOutActionPage.aspx")) {
                             // Login
                             view.loadUrl("javascript:var x = document.getElementById('UserAccount').value = '" +
@@ -114,60 +114,61 @@ public class MainActivity extends ActionBarActivity {
                                     "l.dispatchEvent(e);" +
                                     "})()");
                             textView.setText("Login");
-                        }
-                    }else if ( webView.getUrl().equals("http://163.25.117.185/OGWeb/Default.aspx")){
-                        txtUrl.setText( webView.getUrl());
+
+                    } else if (webView.getUrl().equals("http://163.25.117.185/OGWeb/Default.aspx")) {
+                        txtUrl.setText(webView.getUrl());
                         webView.loadUrl("http://163.25.117.185/OGWeb/OGWebGuard/OGDoorLatchActionPage.aspx");
-                    }else if ( webView.getUrl().equals("http://163.25.117.185/OGWeb/OGWebGuard/OGDoorLatchActionPage.aspx")) {
-                        txtUrl.setText( webView.getUrl());
-                        if (stopOrAuto == true) {
-                            view.loadUrl("javascript:(function(){" +
-                                    "l=document.getElementById('OGDoorLatchActionCtrl_DeviceLatchOnList_ctl00_DeviceOnBtn_Button');" +
-                                    "e=document.createEvent('HTMLEvents');" +
-                                    "e.initEvent('click',true,true);" +
-                                    "l.dispatchEvent(e);" +
-                                    "})()");
-                            textView.setText("ctrl Click Auto");
-                        }else{
-                            view.loadUrl("javascript:(function(){" +
-                                    "l=document.getElementById('OGDoorLatchActionCtrl_DeviceLatchOffList_ctl00_DeviceOffBtn_Button');" +
-                                    "e=document.createEvent('HTMLEvents');" +
-                                    "e.initEvent('click',true,true);" +
-                                    "l.dispatchEvent(e);" +
-                                    "})()");
-                            textView.setText("ctrl Click Stop");
+                    } else if (webView.getUrl().equals("http://163.25.117.185/OGWeb/OGWebGuard/OGDoorLatchActionPage.aspx")) {
+                            txtUrl.setText(webView.getUrl());
+                            textView.setText("in Auto lock Desicion");
+                            if (stopOrAuto) {
+                                view.loadUrl("javascript:(function(){" +
+                                        "l=document.getElementById('OGDoorLatchActionCtrl_DeviceLatchOnList_ctl00_DeviceOnBtn_Button');" +
+                                        "e=document.createEvent('HTMLEvents');" +
+                                        "e.initEvent('click',true,true);" +
+                                        "l.dispatchEvent(e);" +
+                                        "})()");
+                                textView.setText("ctrl Click Auto");
+                            } else {
+                                view.loadUrl("javascript:(function(){" +
+                                        "l=document.getElementById('OGDoorLatchActionCtrl_DeviceLatchOffList_ctl00_DeviceOffBtn_Button');" +
+                                        "e=document.createEvent('HTMLEvents');" +
+                                        "e.initEvent('click',true,true);" +
+                                        "l.dispatchEvent(e);" +
+                                        "})()");
+                                textView.setText("ctrl Click Stop");
+                            }
+                            ctrlLock = false;
                         }
-                        ctrlLock = false;
-                    }
-
-
-                    if (webView.getUrl().equals("http://163.25.117.185/OGWeb/LoginForm.aspx?ReturnUrl=%2fOGWeb%2fOGWebGuard%2fOGDOutActionPage.aspx") && ctrlLock == false) {
-                        // Login
-                        view.loadUrl("javascript:var x = document.getElementById('UserAccount').value = '" +
-                                username + "';");
-                        view.loadUrl("javascript:var y = document.getElementById('UserPassword').value = '" +
-                                pwd + "';");
-                        view.loadUrl("javascript:(function(){" +
-                                "l=document.getElementById('LoginBtn');" +
-                                "e=document.createEvent('HTMLEvents');" +
-                                "e.initEvent('click',true,true);" +
-                                "l.dispatchEvent(e);" +
-                                "})()");
-                        textView.setText("Login");
-                    }else if ( webView.getUrl().equals("http://163.25.117.185/OGWeb/Default.aspx")){
-                        txtUrl.setText( webView.getUrl());
-                        webView.loadUrl("http://163.25.117.185/OGWeb/OGWebGuard/OGDOutActionPage.aspx");
-                    }else if ( webView.getUrl().equals("http://163.25.117.185/OGWeb/OGWebGuard/OGDOutActionPage.aspx")) {
-                        txtUrl.setText( webView.getUrl());
-                        view.loadUrl("javascript:(function(){" +
-                                "l=document.getElementById('OGDOutActionCtrl_DeviceList_ctl00_DeviceBtn_Button');" +
-                                "e=document.createEvent('HTMLEvents');" +
-                                "e.initEvent('click',true,true);" +
-                                "l.dispatchEvent(e);" +
-                                "})()");
-                        textView.setText("Click Open");
-                    }
-                }
+                    } else {
+                        if (webView.getUrl().equals("http://163.25.117.185/OGWeb/LoginForm.aspx?ReturnUrl=%2fOGWeb%2fOGWebGuard%2fOGDOutActionPage.aspx")) {
+                            // Login
+                            view.loadUrl("javascript:var x = document.getElementById('UserAccount').value = '" +
+                                    username + "';");
+                            view.loadUrl("javascript:var y = document.getElementById('UserPassword').value = '" +
+                                    pwd + "';");
+                            view.loadUrl("javascript:(function(){" +
+                                    "l=document.getElementById('LoginBtn');" +
+                                    "e=document.createEvent('HTMLEvents');" +
+                                    "e.initEvent('click',true,true);" +
+                                    "l.dispatchEvent(e);" +
+                                    "})()");
+                            textView.setText("Login");
+                        } else if (webView.getUrl().equals("http://163.25.117.185/OGWeb/Default.aspx")) {
+                            txtUrl.setText(webView.getUrl());
+                            webView.loadUrl("http://163.25.117.185/OGWeb/OGWebGuard/OGDOutActionPage.aspx");
+                        } else if (webView.getUrl().equals("http://163.25.117.185/OGWeb/OGWebGuard/OGDOutActionPage.aspx")) {
+                            txtUrl.setText(webView.getUrl());
+                            view.loadUrl("javascript:(function(){" +
+                                    "l=document.getElementById('OGDOutActionCtrl_DeviceList_ctl00_DeviceBtn_Button');" +
+                                    "e=document.createEvent('HTMLEvents');" +
+                                    "e.initEvent('click',true,true);" +
+                                    "l.dispatchEvent(e);" +
+                                    "})()");
+                            textView.setText("Click Open");
+                        }
+                    } // end else
+                } // end progress = 100
             } // end onProgressedChanged
             @Override
             public boolean onJsAlert(WebView view, final String url, String message,

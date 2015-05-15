@@ -18,6 +18,7 @@ import android.content.Context;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.graphics.Bitmap;
 import android.widget.Toast;
@@ -26,23 +27,25 @@ import java.util.logging.Logger;
 
 public class MainActivity extends ActionBarActivity {
 
-    private WebView webView;
-    private TextView textView , txtUrl;
+    private WebView webView ;
+    private TextView textView , txtUrl , txtProgress;
     private String username = "M5B01";
     private String pwd = "c@dla3";
     private String url = "http://163.25.117.185/OGWeb/LoginForm.aspx";
     private boolean ctrlLock = false ;
     private  boolean stopOrAuto ;
     private Button btnAutoLock , btnStopAutoLock;
+    private ProgressBar progressBar , progressBarCircle;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
        setContentView(R.layout.activity_main);
-
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        progressBarCircle = (ProgressBar) findViewById(R.id.progressBarCircle);
         textView = (TextView) findViewById(R.id.textView);
         webView = (WebView) findViewById(R.id.webView);
         txtUrl = (TextView) findViewById(R.id.txtUrl);
-
+        txtProgress = (TextView) findViewById(R.id.txtProgress);
         btnAutoLock = (Button) findViewById(R.id.btnAutoLock);
         btnStopAutoLock = (Button) findViewById(R.id.btnStopAutoLock);
 
@@ -50,6 +53,7 @@ public class MainActivity extends ActionBarActivity {
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setBuiltInZoomControls(true);
         webView.getSettings().setDomStorageEnabled(true);
+        webView.setVisibility(View.INVISIBLE);
         final WebSettings webSettings = webView.getSettings();
         webSettings.setDomStorageEnabled(true);
         webView.getSettings().setDomStorageEnabled(true);
@@ -83,6 +87,8 @@ public class MainActivity extends ActionBarActivity {
                 webView.loadUrl(urlCtrlLock);
                 ctrlLock = true;
                 stopOrAuto = true;
+                txtProgress.setVisibility(View.VISIBLE);
+                progressBarCircle.setVisibility(View.VISIBLE);
             }
         });
         btnStopAutoLock.setOnClickListener(new View.OnClickListener() {
@@ -91,14 +97,21 @@ public class MainActivity extends ActionBarActivity {
                 webView.loadUrl(urlCtrlLock);
                 ctrlLock = true;
                 stopOrAuto = false;
+                txtProgress.setVisibility(View.VISIBLE);
+                progressBarCircle.setVisibility(View.VISIBLE);
             }
         });
 
 
         webView.setWebChromeClient(new WebChromeClient() {
             public void onProgressChanged(WebView view, int progress) {
-                Log.v("Progress", Integer.toString(progress));
+
+                //Log.v("Progress", Integer.toString(progress));
+                progressBar.setProgress(progress);
+                txtProgress.setText(Integer.toString( progress ));
                 if (progress == 100) {
+                    txtProgress.setVisibility(View.INVISIBLE);
+                    progressBarCircle.setVisibility(View.INVISIBLE);
                     txtUrl.setText(webView.getUrl());
                     if (ctrlLock) {
                         if (webView.getUrl().equals("http://163.25.117.185/OGWeb/LoginForm.aspx?ReturnUrl=%2fOGWeb%2fOGWebGuard%2fOGDOutActionPage.aspx")) {

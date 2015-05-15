@@ -36,6 +36,7 @@ public class OpenTheLab extends AppWidgetProvider {
         webView.loadUrl("http://163.25.117.185/OGWeb/OGWebGuard/OGDOutActionPage.aspx");
         webView.setWebChromeClient(new WebChromeClient() {
             public void onProgressChanged(WebView view, int progress) {
+
                 Log.v("Progress", Integer.toString(progress));
                 if (progress == 100) {
 

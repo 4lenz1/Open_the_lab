@@ -60,4 +60,39 @@
         android:layout_alignParentStart="true"
         android:layout_alignRight="@+id/webView"
         android:layout_alignEnd="@+id/webView" />
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBar"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/webView"
+        android:layout_alignEnd="@+id/webView" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:id="@+id/txtProgress"
+        android:autoText="false"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/webView"
+        android:layout_alignEnd="@+id/webView"
+        android:layout_alignTop="@+id/progressBarCircle"
+        android:layout_alignBottom="@+id/progressBarCircle" />
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBarCircle"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:indeterminate="false" />
+
 </RelativeLayout>

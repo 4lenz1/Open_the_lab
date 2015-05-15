@@ -101,110 +101,25 @@ public class MainActivity extends ActionBarActivity {
                         textView.setText("Click Open");
                     }
                 }
-//                if (webView.getUrl() == "http://163.25.117.185/OGWeb/Default.aspx") {
-//                    webView.loadUrl("http://163.25.117.185/OGWeb/OGWebGuard/OGDOutActionPage.aspx");
-//                }
             } // end onProgressedChanged
-
+            @Override
             public boolean onJsAlert(WebView view, final String url, String message,
                                      JsResult result) {
-                Log.v("JS", "OnJsAlert");
+
                 AlertDialog.Builder builder = new AlertDialog.Builder(
                         MainActivity.this);
                 builder.setMessage(message)
-                        .setNeutralButton("YO", new DialogInterface.OnClickListener() {
+                        .setNeutralButton("OK", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface arg0, int arg1) {
                                 arg0.dismiss();
                             }
                         }).show();
-                result.cancel();
+                result.confirm();
                 return true;
             }
 
         });
-
-
-
-
-
-
-
-//        webView.setWebViewClient(new WebViewClient() {
-//            public void onPageFinished(WebView view, String url) {
-//                //if (progress == 100) {
-//                txtUrl.setText(webView.getUrl());
-//                view.loadUrl("javascript:var x = document.getElementById('UserAccount').value = '" +
-//                        username + "';");
-//                view.loadUrl("javascript:var y = document.getElementById('UserPassword').value = '" +
-//                        pwd + "';");
-//                view.loadUrl("javascript:(function(){" +
-//                        "l=document.getElementById('LoginBtn');" +
-//                        "e=document.createEvent('HTMLEvents');" +
-//                        "e.initEvent('click',true,true);" +
-//                        "l.dispatchEvent(e);" +
-//                        "})()");
-//                textView.setText("Login");
-//                if(webView.getUrl() == "http://163.25.117.185/OGWeb/Default.aspx"){
-//                    webView.loadUrl("http://163.25.117.185/OGWeb/OGWebGuard/OGDOutActionPage.aspx");
-//                }
-//            }
-//            //}
-//            public boolean onJsAlert(WebView view, final String url, String message,
-//                                     JsResult result) {
-//                Log.v("JS","OnJsAlert");
-//                AlertDialog.Builder builder = new AlertDialog.Builder(
-//                        MainActivity.this);
-//                builder.setMessage(message)
-//                        .setNeutralButton("YO", new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface arg0, int arg1) {
-//                                arg0.dismiss();
-//                            }
-//                        }).show();
-//                result.cancel();
-//                return true;
-//            }
-//        });
-//        txtUrl.setText(webView.getUrl());
-//    webView.loadUrl("http://163.25.117.185/OGWeb/OGWebGuard/OGDOutActionPage.aspx");
-
-//        webView.setWebChromeClient(new WebChromeClient() {
-//            public void onProgressChanged(WebView view, int progress) {
-//                Log.v("Progress",Integer.toString(progress));
-//                if (progress == 100) {
-//                    //txtUrl.setText( webView.getUrl());
-//                    view.loadUrl("javascript:(function(){" +
-//                            "l=document.getElementById('OGDOutActionCtrl_DeviceList_ctl00_DeviceBtn_Button');" +
-//                            "e=document.createEvent('HTMLEvents');" +
-//                            "e.initEvent('click',true,true);" +
-//                            "l.dispatchEvent(e);" +
-//                            "})()");
-//                    textView.setText("Click Open");
-//                }
-//                if(webView.getUrl() == "http://163.25.117.185/OGWeb/Default.aspx") {
-//                    webView.loadUrl("http://163.25.117.185/OGWeb/OGWebGuard/OGDOutActionPage.aspx");
-//                }
-//            } // end onProgressedChanged
-//            public boolean onJsAlert(WebView view, final String url, String message,
-//                                     JsResult result) {
-//                Log.v("JS","OnJsAlert");
-//                AlertDialog.Builder builder = new AlertDialog.Builder(
-//                        MainActivity.this);
-//                builder.setMessage(message)
-//                        .setNeutralButton("YO", new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface arg0, int arg1) {
-//                                arg0.dismiss();
-//                            }
-//                        }).show();
-//                result.cancel();
-//                return true;
-//            }
-//
-//        });
-
-
     }
 
     @Override

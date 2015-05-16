@@ -34,7 +34,7 @@ public class MainActivity extends ActionBarActivity {
     private String url = "http://163.25.117.185/OGWeb/LoginForm.aspx";
     private boolean ctrlLock = false ;
     private  boolean stopOrAuto ;
-    private Button btnAutoLock , btnStopAutoLock;
+    private Button btnAutoLock , btnStopAutoLock , btnOpen;
     private ProgressBar progressBar , progressBarCircle;
 
     @Override
@@ -49,6 +49,7 @@ public class MainActivity extends ActionBarActivity {
         txtProgress = (TextView) findViewById(R.id.txtProgress);
         btnAutoLock = (Button) findViewById(R.id.btnAutoLock);
         btnStopAutoLock = (Button) findViewById(R.id.btnStopAutoLock);
+        btnOpen = (Button) findViewById(R.id.btnOpen);
 
         webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
         webView.getSettings().setJavaScriptEnabled(true);
@@ -80,20 +81,29 @@ public class MainActivity extends ActionBarActivity {
         ws.setSaveFormData(false);
 
         webView.setWebViewClient(new WebViewClient());
+        final String btnOpenUrl = "http://163.25.117.185/OGWeb/OGWebGuard/OGDOutActionPage.aspx" ;
         final String btnOpenID = "OGDOutActionCtrl_DeviceList_ctl00_DeviceBtn_Button";
         final String btnAutoLockOff = "OGDoorLatchActionCtrl_DeviceLatchOffList_ctl00_DeviceOffBtn_Button";
         final String btnAutoLockOn =  "OGDoorLatchActionCtrl_DeviceLatchOnList_ctl00_DeviceOnBtn_Button";
         //Auto lock click event
         final String urlCtrlLock = "http://163.25.117.185/OGWeb/OGWebGuard/OGDoorLatchActionPage.aspx" ;
+
+        btnOpen.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // Perform action on click
+                onCtrlClick(btnOpenUrl, false , false);
+            }
+        }); // end btnStopAutoLock
         btnAutoLock.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                onCtrlClick(urlCtrlLock , true , true);
+                onCtrlClick(urlCtrlLock , true , false);
             }
         });// end btnAutoLock
+
         btnStopAutoLock.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Perform action on click
-               onCtrlClick(urlCtrlLock , true , false);
+               onCtrlClick(urlCtrlLock , true , true);
             }
         }); // end btnStopAutoLock
 
@@ -121,7 +131,7 @@ public class MainActivity extends ActionBarActivity {
                     } else if (webView.getUrl().equals("http://163.25.117.185/OGWeb/OGWebGuard/OGDoorLatchActionPage.aspx")) {
                             txtUrl.setText(webView.getUrl());
                             textView.setText("in Auto lock Desicion");
-                            if (stopOrAuto) {
+                            if (!stopOrAuto) {
                                 clickConfirm(view , btnAutoLockOn);
                                 textView.setText("ctrl Click Auto");
                             } else {
@@ -166,8 +176,7 @@ public class MainActivity extends ActionBarActivity {
 
         });
     }
-
-    public  void onCtrlClick(String url , boolean ctrlLcok ,boolean stopOtAuto ){
+    public  void onCtrlClick(String url , boolean ctrlLcok ,boolean stopOrAuto ){
         //set 2 progressbar to VISIBLE
         txtProgress.setVisibility(View.VISIBLE);
         progressBarCircle.setVisibility(View.VISIBLE);
@@ -175,7 +184,7 @@ public class MainActivity extends ActionBarActivity {
         webView.loadUrl(url);
         // assign click boolean value
         this.ctrlLock = ctrlLcok;
-        this.stopOrAuto = stopOtAuto;
+        this.stopOrAuto = stopOrAuto;
     }
     public void fillAccountAndPassword(WebView view , String account , String password){
         view.loadUrl("javascript:var x = document.getElementById('UserAccount').value = '" +

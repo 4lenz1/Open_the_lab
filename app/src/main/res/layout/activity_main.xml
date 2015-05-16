@@ -22,9 +22,9 @@
         android:text="Yet"
         android:id="@+id/textView"
         android:textSize="18dp"
-        android:layout_above="@+id/txtUrl"
-        android:layout_alignRight="@+id/webView"
-        android:layout_alignEnd="@+id/webView"
+        android:layout_below="@+id/txtProgress"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
@@ -33,11 +33,11 @@
         android:layout_height="wrap_content"
         android:text="txtUrl"
         android:id="@+id/txtUrl"
-        android:layout_above="@+id/btnStopAutoLock"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/textView"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/webView"
+        android:layout_alignEnd="@+id/webView" />
 
     <Button
         android:layout_width="wrap_content"
@@ -94,5 +94,16 @@
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
         android:indeterminate="false" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Open Again"
+        android:id="@+id/btnOpen"
+        android:layout_above="@+id/btnStopAutoLock"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>

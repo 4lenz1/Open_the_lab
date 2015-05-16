@@ -36,6 +36,7 @@ public class MainActivity extends ActionBarActivity {
     private  boolean stopOrAuto ;
     private Button btnAutoLock , btnStopAutoLock;
     private ProgressBar progressBar , progressBarCircle;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +60,7 @@ public class MainActivity extends ActionBarActivity {
         webView.getSettings().setDomStorageEnabled(true);
         webView.clearCache(true);
 
+
         final Activity activity = this;
         webView.setWebViewClient(new WebViewClient() {
             public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
@@ -78,29 +80,22 @@ public class MainActivity extends ActionBarActivity {
         ws.setSaveFormData(false);
 
         webView.setWebViewClient(new WebViewClient());
-
+        final String btnOpenID = "OGDOutActionCtrl_DeviceList_ctl00_DeviceBtn_Button";
+        final String btnAutoLockOff = "OGDoorLatchActionCtrl_DeviceLatchOffList_ctl00_DeviceOffBtn_Button";
+        final String btnAutoLockOn =  "OGDoorLatchActionCtrl_DeviceLatchOnList_ctl00_DeviceOnBtn_Button";
         //Auto lock click event
         final String urlCtrlLock = "http://163.25.117.185/OGWeb/OGWebGuard/OGDoorLatchActionPage.aspx" ;
         btnAutoLock.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                // Perform action on click
-                webView.loadUrl(urlCtrlLock);
-                ctrlLock = true;
-                stopOrAuto = true;
-                txtProgress.setVisibility(View.VISIBLE);
-                progressBarCircle.setVisibility(View.VISIBLE);
+                onCtrlClick(urlCtrlLock , true , true);
             }
-        });
+        });// end btnAutoLock
         btnStopAutoLock.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Perform action on click
-                webView.loadUrl(urlCtrlLock);
-                ctrlLock = true;
-                stopOrAuto = false;
-                txtProgress.setVisibility(View.VISIBLE);
-                progressBarCircle.setVisibility(View.VISIBLE);
+               onCtrlClick(urlCtrlLock , true , false);
             }
-        });
+        }); // end btnStopAutoLock
 
 
         webView.setWebChromeClient(new WebChromeClient() {
@@ -116,16 +111,8 @@ public class MainActivity extends ActionBarActivity {
                     if (ctrlLock) {
                         if (webView.getUrl().equals("http://163.25.117.185/OGWeb/LoginForm.aspx?ReturnUrl=%2fOGWeb%2fOGWebGuard%2fOGDOutActionPage.aspx")) {
                             // Login
-                            view.loadUrl("javascript:var x = document.getElementById('UserAccount').value = '" +
-                                    username + "';");
-                            view.loadUrl("javascript:var y = document.getElementById('UserPassword').value = '" +
-                                    pwd + "';");
-                            view.loadUrl("javascript:(function(){" +
-                                    "l=document.getElementById('LoginBtn');" +
-                                    "e=document.createEvent('HTMLEvents');" +
-                                    "e.initEvent('click',true,true);" +
-                                    "l.dispatchEvent(e);" +
-                                    "})()");
+                            fillAccountAndPassword(view,username,pwd);
+                            clickLogin(view);
                             textView.setText("Login");
 
                     } else if (webView.getUrl().equals("http://163.25.117.185/OGWeb/Default.aspx")) {
@@ -135,20 +122,10 @@ public class MainActivity extends ActionBarActivity {
                             txtUrl.setText(webView.getUrl());
                             textView.setText("in Auto lock Desicion");
                             if (stopOrAuto) {
-                                view.loadUrl("javascript:(function(){" +
-                                        "l=document.getElementById('OGDoorLatchActionCtrl_DeviceLatchOnList_ctl00_DeviceOnBtn_Button');" +
-                                        "e=document.createEvent('HTMLEvents');" +
-                                        "e.initEvent('click',true,true);" +
-                                        "l.dispatchEvent(e);" +
-                                        "})()");
+                                clickConfirm(view , btnAutoLockOn);
                                 textView.setText("ctrl Click Auto");
                             } else {
-                                view.loadUrl("javascript:(function(){" +
-                                        "l=document.getElementById('OGDoorLatchActionCtrl_DeviceLatchOffList_ctl00_DeviceOffBtn_Button');" +
-                                        "e=document.createEvent('HTMLEvents');" +
-                                        "e.initEvent('click',true,true);" +
-                                        "l.dispatchEvent(e);" +
-                                        "})()");
+                                clickConfirm(view , btnAutoLockOff);
                                 textView.setText("ctrl Click Stop");
                             }
                             ctrlLock = false;
@@ -156,28 +133,15 @@ public class MainActivity extends ActionBarActivity {
                     } else {
                         if (webView.getUrl().equals("http://163.25.117.185/OGWeb/LoginForm.aspx?ReturnUrl=%2fOGWeb%2fOGWebGuard%2fOGDOutActionPage.aspx")) {
                             // Login
-                            view.loadUrl("javascript:var x = document.getElementById('UserAccount').value = '" +
-                                    username + "';");
-                            view.loadUrl("javascript:var y = document.getElementById('UserPassword').value = '" +
-                                    pwd + "';");
-                            view.loadUrl("javascript:(function(){" +
-                                    "l=document.getElementById('LoginBtn');" +
-                                    "e=document.createEvent('HTMLEvents');" +
-                                    "e.initEvent('click',true,true);" +
-                                    "l.dispatchEvent(e);" +
-                                    "})()");
+                            fillAccountAndPassword(view,username,pwd);
+                            clickLogin(view);
                             textView.setText("Login");
                         } else if (webView.getUrl().equals("http://163.25.117.185/OGWeb/Default.aspx")) {
                             txtUrl.setText(webView.getUrl());
                             webView.loadUrl("http://163.25.117.185/OGWeb/OGWebGuard/OGDOutActionPage.aspx");
                         } else if (webView.getUrl().equals("http://163.25.117.185/OGWeb/OGWebGuard/OGDOutActionPage.aspx")) {
                             txtUrl.setText(webView.getUrl());
-                            view.loadUrl("javascript:(function(){" +
-                                    "l=document.getElementById('OGDOutActionCtrl_DeviceList_ctl00_DeviceBtn_Button');" +
-                                    "e=document.createEvent('HTMLEvents');" +
-                                    "e.initEvent('click',true,true);" +
-                                    "l.dispatchEvent(e);" +
-                                    "})()");
+                            clickConfirm(view , btnOpenID);
                             textView.setText("Click Open");
                         }
                     } // end else
@@ -203,6 +167,38 @@ public class MainActivity extends ActionBarActivity {
         });
     }
 
+    public  void onCtrlClick(String url , boolean ctrlLcok ,boolean stopOtAuto ){
+        //set 2 progressbar to VISIBLE
+        txtProgress.setVisibility(View.VISIBLE);
+        progressBarCircle.setVisibility(View.VISIBLE);
+        //load to Contrl Auto Lock Web Page
+        webView.loadUrl(url);
+        // assign click boolean value
+        this.ctrlLock = ctrlLcok;
+        this.stopOrAuto = stopOtAuto;
+    }
+    public void fillAccountAndPassword(WebView view , String account , String password){
+        view.loadUrl("javascript:var x = document.getElementById('UserAccount').value = '" +
+                account + "';");
+        view.loadUrl("javascript:var y = document.getElementById('UserPassword').value = '" +
+                password + "';");
+    }
+    public void clickLogin(WebView view){
+        view.loadUrl("javascript:(function(){" +
+                "l=document.getElementById('LoginBtn');" +
+                "e=document.createEvent('HTMLEvents');" +
+                "e.initEvent('click',true,true);" +
+                "l.dispatchEvent(e);" +
+                "})()");
+    }
+    public void clickConfirm(WebView view, String buttonID){
+        view.loadUrl("javascript:(function(){" +
+                "l=document.getElementById('"+buttonID+"');" +
+                "e=document.createEvent('HTMLEvents');" +
+                "e.initEvent('click',true,true);" +
+                "l.dispatchEvent(e);" +
+                "})()");;
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.

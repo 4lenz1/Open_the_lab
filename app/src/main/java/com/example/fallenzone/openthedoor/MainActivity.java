@@ -1,6 +1,7 @@
 package com.example.fallenzone.openthedoor;
 
 import android.app.Activity;
+import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,7 +19,10 @@ import android.content.Context;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.graphics.Bitmap;
 import android.widget.Toast;
@@ -36,11 +40,12 @@ public class MainActivity extends ActionBarActivity {
     private  boolean stopOrAuto ;
     private Button btnAutoLock , btnStopAutoLock , btnOpen;
     private ProgressBar progressBar , progressBarCircle;
-
+    private Switch switchWebView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-       setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main);
+        switchWebView = (Switch) findViewById(R.id.switchWebView);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         progressBarCircle = (ProgressBar) findViewById(R.id.progressBarCircle);
         textView = (TextView) findViewById(R.id.textView);
@@ -88,6 +93,13 @@ public class MainActivity extends ActionBarActivity {
         //Auto lock click event
         final String urlCtrlLock = "http://163.25.117.185/OGWeb/OGWebGuard/OGDoorLatchActionPage.aspx" ;
 
+        switchWebView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
+        @Override
+        public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
+            webView.setVisibility((switchWebView.isChecked()) ? View.VISIBLE : View.INVISIBLE);
+        }
+    });
+
         btnOpen.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Perform action on click
@@ -103,7 +115,7 @@ public class MainActivity extends ActionBarActivity {
         btnStopAutoLock.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Perform action on click
-               onCtrlClick(urlCtrlLock , true , true);
+                onCtrlClick(urlCtrlLock , true , true);
             }
         }); // end btnStopAutoLock
 
@@ -125,10 +137,10 @@ public class MainActivity extends ActionBarActivity {
                             clickLogin(view);
                             textView.setText("Login");
 
-                    } else if (webView.getUrl().equals("http://163.25.117.185/OGWeb/Default.aspx")) {
-                        txtUrl.setText(webView.getUrl());
-                        webView.loadUrl("http://163.25.117.185/OGWeb/OGWebGuard/OGDoorLatchActionPage.aspx");
-                    } else if (webView.getUrl().equals("http://163.25.117.185/OGWeb/OGWebGuard/OGDoorLatchActionPage.aspx")) {
+                        } else if (webView.getUrl().equals("http://163.25.117.185/OGWeb/Default.aspx")) {
+                            txtUrl.setText(webView.getUrl());
+                            webView.loadUrl("http://163.25.117.185/OGWeb/OGWebGuard/OGDoorLatchActionPage.aspx");
+                        } else if (webView.getUrl().equals("http://163.25.117.185/OGWeb/OGWebGuard/OGDoorLatchActionPage.aspx")) {
                             txtUrl.setText(webView.getUrl());
                             textView.setText("in Auto lock Desicion");
                             if (!stopOrAuto) {

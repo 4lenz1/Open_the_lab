@@ -127,20 +127,22 @@ public class MainActivity extends ActionBarActivity {
                 progressBar.setProgress(progress);
                 txtProgress.setText(Integer.toString( progress ));
                 if (progress == 100) {
-                    txtProgress.setVisibility(View.INVISIBLE);
-                    progressBarCircle.setVisibility(View.INVISIBLE);
                     txtUrl.setText(webView.getUrl());
+                    if (webView.getUrl().equals("http://163.25.117.185/OGWeb/LoginForm.aspx?ReturnUrl=%2fOGWeb%2fOGWebGuard%2fOGDOutActionPage.aspx")) {
+                        // Fill acount , password on web view
+                        fillAccountAndPassword(view, username, pwd);
+                        //click button on the web view
+                        clickLogin(view);
+                        textView.setText("Logging");
+                    }
                     if (ctrlLock) {
-                        if (webView.getUrl().equals("http://163.25.117.185/OGWeb/LoginForm.aspx?ReturnUrl=%2fOGWeb%2fOGWebGuard%2fOGDOutActionPage.aspx")) {
-                            // Login
-                            fillAccountAndPassword(view,username,pwd);
-                            clickLogin(view);
-                            textView.setText("Login");
-
-                        } else if (webView.getUrl().equals("http://163.25.117.185/OGWeb/Default.aspx")) {
+                        if (webView.getUrl().equals("http://163.25.117.185/OGWeb/Default.aspx")) {
                             txtUrl.setText(webView.getUrl());
+                            textView.setText("Redirecting");
                             webView.loadUrl("http://163.25.117.185/OGWeb/OGWebGuard/OGDoorLatchActionPage.aspx");
                         } else if (webView.getUrl().equals("http://163.25.117.185/OGWeb/OGWebGuard/OGDoorLatchActionPage.aspx")) {
+                            txtProgress.setVisibility(View.INVISIBLE);
+                            progressBarCircle.setVisibility(View.INVISIBLE);
                             txtUrl.setText(webView.getUrl());
                             textView.setText("in Auto lock Desicion");
                             if (!stopOrAuto) {
@@ -153,18 +155,16 @@ public class MainActivity extends ActionBarActivity {
                             ctrlLock = false;
                         }
                     } else {
-                        if (webView.getUrl().equals("http://163.25.117.185/OGWeb/LoginForm.aspx?ReturnUrl=%2fOGWeb%2fOGWebGuard%2fOGDOutActionPage.aspx")) {
-                            // Login
-                            fillAccountAndPassword(view,username,pwd);
-                            clickLogin(view);
-                            textView.setText("Login");
-                        } else if (webView.getUrl().equals("http://163.25.117.185/OGWeb/Default.aspx")) {
+                             if (webView.getUrl().equals("http://163.25.117.185/OGWeb/Default.aspx")) {
                             txtUrl.setText(webView.getUrl());
+                            textView.setText("Redirecting");
                             webView.loadUrl("http://163.25.117.185/OGWeb/OGWebGuard/OGDOutActionPage.aspx");
                         } else if (webView.getUrl().equals("http://163.25.117.185/OGWeb/OGWebGuard/OGDOutActionPage.aspx")) {
+                            txtProgress.setVisibility(View.INVISIBLE);
+                            progressBarCircle.setVisibility(View.INVISIBLE);
                             txtUrl.setText(webView.getUrl());
                             clickConfirm(view , btnOpenID);
-                            textView.setText("Click Open");
+                            textView.setText("Clicked Open");
                         }
                     } // end else
                 } // end progress = 100

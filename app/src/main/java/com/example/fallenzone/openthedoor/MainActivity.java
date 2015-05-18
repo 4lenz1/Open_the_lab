@@ -60,7 +60,14 @@ public class MainActivity extends ActionBarActivity {
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setBuiltInZoomControls(true);
         webView.getSettings().setDomStorageEnabled(true);
+
+
+        //set component invisiable on start
         webView.setVisibility(View.INVISIBLE);
+        txtUrl.setVisibility(View.INVISIBLE);
+        textView.setVisibility(View.INVISIBLE);
+
+
         final WebSettings webSettings = webView.getSettings();
         webSettings.setDomStorageEnabled(true);
         webView.getSettings().setDomStorageEnabled(true);
@@ -86,7 +93,9 @@ public class MainActivity extends ActionBarActivity {
         ws.setSaveFormData(false);
 
         webView.setWebViewClient(new WebViewClient());
-        final String btnOpenUrl = "http://163.25.117.185/OGWeb/OGWebGuard/OGDOutActionPage.aspx" ;
+        final String urlOpen = "http://163.25.117.185/OGWeb/OGWebGuard/OGDOutActionPage.aspx" ;
+        final String urlDefault = "http://163.25.117.185/OGWeb/Default.aspx" ;
+        final String urlCtrl = "http://163.25.117.185/OGWeb/OGWebGuard/OGDoorLatchActionPage.aspx";
         final String btnOpenID = "OGDOutActionCtrl_DeviceList_ctl00_DeviceBtn_Button";
         final String btnAutoLockOff = "OGDoorLatchActionCtrl_DeviceLatchOffList_ctl00_DeviceOffBtn_Button";
         final String btnAutoLockOn =  "OGDoorLatchActionCtrl_DeviceLatchOnList_ctl00_DeviceOnBtn_Button";
@@ -96,26 +105,42 @@ public class MainActivity extends ActionBarActivity {
         switchWebView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
         @Override
         public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
-            webView.setVisibility((switchWebView.isChecked()) ? View.VISIBLE : View.INVISIBLE);
+           // webView.setVisibility((switchWebView.isChecked()) ? View.VISIBLE : View.INVISIBLE);
+            if (switchWebView.isChecked()){
+                webView.setVisibility(View.VISIBLE);
+                textView.setVisibility(View.VISIBLE);
+                txtUrl.setVisibility(View.VISIBLE);
+                switchWebView.setText("");
+                progressBar.setVisibility(View.INVISIBLE);
+            }else{
+                webView.setVisibility(View.INVISIBLE);
+                textView.setVisibility(View.INVISIBLE);
+                txtUrl.setVisibility(View.INVISIBLE);
+                progressBar.setVisibility(View.VISIBLE);
+                switchWebView.setText("Show Information");
+            }
         }
     });
 
         btnOpen.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Perform action on click
-                onCtrlClick(btnOpenUrl, false , false);
+         if (!clickDirectly(webView,urlOpen,btnOpenID))
+             onCtrlClick(urlOpen, false , false);
             }
         }); // end btnStopAutoLock
         btnAutoLock.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                onCtrlClick(urlCtrlLock , true , false);
+           //     if (!clickDirectly(webview, urlCtrl , btnAutoLockOn))
+                 onCtrlClick(urlCtrlLock , true , false);
             }
         });// end btnAutoLock
 
         btnStopAutoLock.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Perform action on click
-                onCtrlClick(urlCtrlLock , true , true);
+                //if (!clickDirectly(webview, urlCtrl , btnAutoLockOff))
+                    onCtrlClick(urlCtrlLock , true , true);
             }
         }); // end btnStopAutoLock
 
@@ -134,34 +159,21 @@ public class MainActivity extends ActionBarActivity {
                         //click button on the web view
                         clickLogin(view);
                         textView.setText("Logging");
+                    }else if (webView.getUrl().equals(urlDefault)) {
+                        txtUrl.setText(webView.getUrl());
+                        textView.setText("Redirecting");
+                        webView.loadUrl( ctrlLock ? urlCtrl : urlOpen);
                     }
                     if (ctrlLock) {
-                        if (webView.getUrl().equals("http://163.25.117.185/OGWeb/Default.aspx")) {
-                            txtUrl.setText(webView.getUrl());
-                            textView.setText("Redirecting");
-                            webView.loadUrl("http://163.25.117.185/OGWeb/OGWebGuard/OGDoorLatchActionPage.aspx");
-                        } else if (webView.getUrl().equals("http://163.25.117.185/OGWeb/OGWebGuard/OGDoorLatchActionPage.aspx")) {
-                            txtProgress.setVisibility(View.INVISIBLE);
-                            progressBarCircle.setVisibility(View.INVISIBLE);
+                        if (webView.getUrl().equals(urlCtrl)) {
                             txtUrl.setText(webView.getUrl());
                             textView.setText("in Auto lock Desicion");
-                            if (!stopOrAuto) {
-                                clickConfirm(view , btnAutoLockOn);
-                                textView.setText("ctrl Click Auto");
-                            } else {
-                                clickConfirm(view , btnAutoLockOff);
-                                textView.setText("ctrl Click Stop");
-                            }
+                            clickConfirm(view , stopOrAuto ? btnAutoLockOff : btnAutoLockOn);
                             ctrlLock = false;
+                            textView.setText("Stop Auto Lock  : " +stopOrAuto );
                         }
                     } else {
-                             if (webView.getUrl().equals("http://163.25.117.185/OGWeb/Default.aspx")) {
-                            txtUrl.setText(webView.getUrl());
-                            textView.setText("Redirecting");
-                            webView.loadUrl("http://163.25.117.185/OGWeb/OGWebGuard/OGDOutActionPage.aspx");
-                        } else if (webView.getUrl().equals("http://163.25.117.185/OGWeb/OGWebGuard/OGDOutActionPage.aspx")) {
-                            txtProgress.setVisibility(View.INVISIBLE);
-                            progressBarCircle.setVisibility(View.INVISIBLE);
+                        if (webView.getUrl().equals(urlOpen)) {
                             txtUrl.setText(webView.getUrl());
                             clickConfirm(view , btnOpenID);
                             textView.setText("Clicked Open");
@@ -198,6 +210,14 @@ public class MainActivity extends ActionBarActivity {
         this.ctrlLock = ctrlLcok;
         this.stopOrAuto = stopOrAuto;
     }
+    public boolean clickDirectly(WebView view , String clickUrl , String buttonID){
+        if (view.getUrl().equals(clickUrl)) {
+            clickConfirm(view, buttonID);
+            return true;
+        }else{
+            return false;
+        }
+    }
     public void fillAccountAndPassword(WebView view , String account , String password){
         view.loadUrl("javascript:var x = document.getElementById('UserAccount').value = '" +
                 account + "';");
@@ -213,6 +233,8 @@ public class MainActivity extends ActionBarActivity {
                 "})()");
     }
     public void clickConfirm(WebView view, String buttonID){
+        txtProgress.setVisibility(View.INVISIBLE);
+        progressBarCircle.setVisibility(View.INVISIBLE);
         view.loadUrl("javascript:(function(){" +
                 "l=document.getElementById('"+buttonID+"');" +
                 "e=document.createEvent('HTMLEvents');" +

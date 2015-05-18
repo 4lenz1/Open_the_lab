@@ -1,49 +1,42 @@
 package com.example.fallenzone.openthedoor;
 
 import android.app.Activity;
-import android.provider.MediaStore;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.webkit.CookieManager;
-import android.webkit.CookieSyncManager;
 import android.webkit.JsResult;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.webkit.WebChromeClient;
-import android.content.Context;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ProgressBar;
-import android.widget.RadioButton;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.graphics.Bitmap;
 import android.widget.Toast;
 
-import java.util.logging.Logger;
-
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends /*ActionBarActivity*/ Activity {
 
     private WebView webView ;
     private TextView textView , txtUrl , txtProgress;
     private String username = "M5B01";
     private String pwd = "c@dla3";
-    private String url = "http://163.25.117.185/OGWeb/LoginForm.aspx";
+    //private String url = "http://163.25.117.185/OGWeb/LoginForm.aspx";
     private boolean ctrlLock = false ;
     private  boolean stopOrAuto ;
-    private Button btnAutoLock , btnStopAutoLock , btnOpen;
+
     private ProgressBar progressBar , progressBarCircle;
     private Switch switchWebView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        final Button btnAutoLock , btnStopAutoLock , btnOpen;
+
         setContentView(R.layout.activity_main);
         switchWebView = (Switch) findViewById(R.id.switchWebView);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
@@ -240,7 +233,7 @@ public class MainActivity extends ActionBarActivity {
                 "e=document.createEvent('HTMLEvents');" +
                 "e.initEvent('click',true,true);" +
                 "l.dispatchEvent(e);" +
-                "})()");;
+                "})()");
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

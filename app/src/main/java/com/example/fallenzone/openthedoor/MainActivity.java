@@ -22,7 +22,7 @@ import android.widget.Toast;
 public class MainActivity extends /*ActionBarActivity*/ Activity {
 
     private WebView webView ;
-    private TextView textView , txtUrl , txtProgress;
+    private TextView textView , txtUrl , txtProgress , txtaccout;
     private String username = "M5B01";
     private String pwd = "c@dla3";
     //private String url = "http://163.25.117.185/OGWeb/LoginForm.aspx";
@@ -35,9 +35,11 @@ public class MainActivity extends /*ActionBarActivity*/ Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
         final Button btnAutoLock , btnStopAutoLock , btnOpen;
 
         setContentView(R.layout.activity_main);
+        txtaccout = (TextView) findViewById(R.id.txtaccount);
         switchWebView = (Switch) findViewById(R.id.switchWebView);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         progressBarCircle = (ProgressBar) findViewById(R.id.progressBarCircle);
@@ -65,6 +67,12 @@ public class MainActivity extends /*ActionBarActivity*/ Activity {
         webSettings.setDomStorageEnabled(true);
         webView.getSettings().setDomStorageEnabled(true);
         webView.clearCache(true);
+
+
+        Login login = new Login();
+
+        login.setAccount(username);
+        txtaccout.setText(login.getAccount());
 
 
         final Activity activity = this;

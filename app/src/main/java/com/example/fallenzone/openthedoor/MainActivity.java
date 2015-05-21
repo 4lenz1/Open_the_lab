@@ -1,6 +1,7 @@
 package com.example.fallenzone.openthedoor;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -36,9 +37,10 @@ public class MainActivity extends /*ActionBarActivity*/ Activity {
         super.onCreate(savedInstanceState);
 
 
-        final Button btnAutoLock , btnStopAutoLock , btnOpen;
+        final Button btnAutoLock , btnStopAutoLock , btnOpen , btnSetting;
 
         setContentView(R.layout.activity_main);
+        btnSetting = (Button) findViewById(R.id.btnSetting);
         txtaccout = (TextView) findViewById(R.id.txtaccount);
         switchWebView = (Switch) findViewById(R.id.switchWebView);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
@@ -126,8 +128,8 @@ public class MainActivity extends /*ActionBarActivity*/ Activity {
         btnOpen.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Perform action on click
-         if (!clickDirectly(webView,urlOpen,btnOpenID))
-             onCtrlClick(urlOpen, false , false);
+                if (!clickDirectly(webView, urlOpen, btnOpenID))
+                    onCtrlClick(urlOpen, false, false);
             }
         }); // end btnStopAutoLock
         btnAutoLock.setOnClickListener(new View.OnClickListener() {
@@ -145,15 +147,25 @@ public class MainActivity extends /*ActionBarActivity*/ Activity {
             }
         }); // end btnStopAutoLock
 
+        btnSetting.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // Perform action on click
+                //if (!clickDirectly(webview, urlCtrl , btnAutoLockOff))
+                //setContentView(R.layout.activity_setting);
+                Intent it1 = new Intent(getApplicationContext() , Setting.class);
+                startActivity(it1);
+            }
+        }); // end btnStopAutoLock
 
         webView.setWebChromeClient(new WebChromeClient() {
             public void onProgressChanged(WebView view, int progress) {
-
                 //Log.v("Progress", Integer.toString(progress));
                 progressBar.setProgress(progress);
                 txtProgress.setText(Integer.toString( progress ));
                 if (progress == 100) {
                     txtUrl.setText(webView.getUrl());
+                    //webView.loadUrl(webView.getUrl().equals("http://163.25.117.185/OGWeb/LoginForm.aspx?ReturnUrl=%2fOGWeb%2fOGWebGuard%2fOGDOutActionPage.aspx") ?
+                     //       fillAccountAndPassword(view , username , pwd) , clickLogin(view) : clickLogin(view));
                     if (webView.getUrl().equals("http://163.25.117.185/OGWeb/LoginForm.aspx?ReturnUrl=%2fOGWeb%2fOGWebGuard%2fOGDOutActionPage.aspx")) {
                         // Fill acount , password on web view
                         fillAccountAndPassword(view, username, pwd);
@@ -161,25 +173,17 @@ public class MainActivity extends /*ActionBarActivity*/ Activity {
                         clickLogin(view);
                         textView.setText("Logging");
                     }else if (webView.getUrl().equals(urlDefault)) {
-                        txtUrl.setText(webView.getUrl());
                         textView.setText("Redirecting");
-                        webView.loadUrl( ctrlLock ? urlCtrl : urlOpen);
-                    }
-                    if (ctrlLock) {
-                        if (webView.getUrl().equals(urlCtrl)) {
-                            txtUrl.setText(webView.getUrl());
+                        webView.loadUrl(ctrlLock ? urlCtrl : urlOpen);
+                    } else if (webView.getUrl().equals(urlCtrl)) {
                             textView.setText("in Auto lock Desicion");
                             clickConfirm(view , stopOrAuto ? btnAutoLockOff : btnAutoLockOn);
                             ctrlLock = false;
                             textView.setText("Stop Auto Lock  : " +stopOrAuto );
-                        }
-                    } else {
-                        if (webView.getUrl().equals(urlOpen)) {
-                            txtUrl.setText(webView.getUrl());
+                    } else  if (webView.getUrl().equals(urlOpen)) {
                             clickConfirm(view , btnOpenID);
                             textView.setText("Clicked Open");
                         }
-                    } // end else
                 } // end progress = 100
             } // end onProgressedChanged
             @Override
@@ -224,6 +228,7 @@ public class MainActivity extends /*ActionBarActivity*/ Activity {
                 account + "';");
         view.loadUrl("javascript:var y = document.getElementById('UserPassword').value = '" +
                 password + "';");
+      //  clickLogin(view);
     }
     public void clickLogin(WebView view){
         view.loadUrl("javascript:(function(){" +

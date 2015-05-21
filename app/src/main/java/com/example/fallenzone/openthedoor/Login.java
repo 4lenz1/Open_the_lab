@@ -22,6 +22,9 @@ public class Login extends MainActivity {
 
     }
 
+    public void login (){
+
+    }
     public String getAccount() {
         StringBuffer data = new StringBuffer();
         try {

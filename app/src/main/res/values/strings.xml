@@ -6,4 +6,5 @@
     <string name="appwidget_text">Open The Lab</string>
     <string name="add_widget">Add widget</string>
     <string name="configure">Configure</string>
+    <string name="title_activity_setting">Setting</string>
 </resources>

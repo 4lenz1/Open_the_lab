@@ -120,8 +120,9 @@ public class MainActivity extends /*ActionBarActivity*/ Activity {
         final String urlDefault = "http://163.25.117.185/OGWeb/Default.aspx" ;
         final String urlCtrl = "http://163.25.117.185/OGWeb/OGWebGuard/OGDoorLatchActionPage.aspx";
         final String btnOpenID = "OGDOutActionCtrl_DeviceList_ctl00_DeviceBtn_Button";
-        final String btnAutoLockOff = "OGDoorLatchActionCtrl_DeviceLatchOffList_ctl00_DeviceOffBtn_Button";
-        final String btnAutoLockOn =  "OGDoorLatchActionCtrl_DeviceLatchOnList_ctl00_DeviceOnBtn_Button";
+        final String btnAutoLockOffID = "OGDoorLatchActionCtrl_DeviceLatchOffList_ctl00_DeviceOffBtn_Button";
+        final String btnAutoLockOnID =  "OGDoorLatchActionCtrl_DeviceLatchOnList_ctl00_DeviceOnBtn_Button";
+        final String urlLogin = "http://163.25.117.185/OGWeb/LoginForm.aspx?ReturnUrl=%2fOGWeb%2fOGWebGuard%2fOGDOutActionPage.aspx";
         //Auto lock click event
         final String urlCtrlLock = "http://163.25.117.185/OGWeb/OGWebGuard/OGDoorLatchActionPage.aspx" ;
 
@@ -154,9 +155,8 @@ public class MainActivity extends /*ActionBarActivity*/ Activity {
         }); // end btnStopAutoLock
         btnAutoLock.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-           //     if (!clickDirectly(webview, urlCtrl , btnAutoLockOn))
                 if(webCtrlView.getUrl().equals(urlCtrlLock)) {
-                    clickConfirm(webCtrlView, btnAutoLockOn);
+                    clickConfirm(webCtrlView, btnAutoLockOnID);
                 }else {
                     onCtrlClick(urlCtrlLock, true, false);
                 }
@@ -168,7 +168,7 @@ public class MainActivity extends /*ActionBarActivity*/ Activity {
                 // Perform action on click
                 //if (!clickDirectly(webview, urlCtrl , btnAutoLockOff))
                 if(webCtrlView.getUrl().equals(urlCtrlLock)) {
-                    clickConfirm(webCtrlView, btnAutoLockOff);
+                    clickConfirm(webCtrlView, btnAutoLockOffID);
                 }else {
                     onCtrlClick(urlCtrlLock, true, true);
                 }
@@ -177,9 +177,6 @@ public class MainActivity extends /*ActionBarActivity*/ Activity {
 
         btnSetting.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                // Perform action on click
-                //if (!clickDirectly(webview, urlCtrl , btnAutoLockOff))
-                //setContentView(R.layout.activity_setting);
                 Intent it1 = new Intent(getApplicationContext() , Setting.class);
                 startActivity(it1);
             }
@@ -188,13 +185,13 @@ public class MainActivity extends /*ActionBarActivity*/ Activity {
         webCtrlView.setWebChromeClient(new WebChromeClient() {
             public void onProgressChanged(WebView view, int progress) {
                 if (progress == 100) {
-                    if (view.getUrl().equals("http://163.25.117.185/OGWeb/LoginForm.aspx?ReturnUrl=%2fOGWeb%2fOGWebGuard%2fOGDOutActionPage.aspx")) {
+                    if (view.getUrl().equals(urlLogin)) {
                         fillAccountAndPassword(view, username, pwd);
                         clickLogin(view);
                     }else if (view.getUrl().equals(urlDefault)) {
                         view.loadUrl(urlCtrl);
                     } else if (view.getUrl().equals(urlCtrl)) {
-                        clickConfirm(view , stopOrAuto ? btnAutoLockOff : btnAutoLockOn);
+                        clickConfirm(view , stopOrAuto ? btnAutoLockOffID : btnAutoLockOnID);
                     }
                 } // end progress == 100
             }
@@ -224,7 +221,7 @@ public class MainActivity extends /*ActionBarActivity*/ Activity {
                     txtUrl.setText(view.getUrl());
                     //webView.loadUrl(webView.getUrl().equals("http://163.25.117.185/OGWeb/LoginForm.aspx?ReturnUrl=%2fOGWeb%2fOGWebGuard%2fOGDOutActionPage.aspx") ?
                      //       fillAccountAndPassword(view , username , pwd) , clickLogin(view) : clickLogin(view));
-                    if (view.getUrl().equals("http://163.25.117.185/OGWeb/LoginForm.aspx?ReturnUrl=%2fOGWeb%2fOGWebGuard%2fOGDOutActionPage.aspx")) {
+                    if (view.getUrl().equals(urlLogin)) {
                         // Fill acount , password on web view
                         fillAccountAndPassword(view, username, pwd);
                         //click button on the web view
@@ -232,16 +229,11 @@ public class MainActivity extends /*ActionBarActivity*/ Activity {
                         textView.setText("Logging");
                     }else if (view.getUrl().equals(urlDefault)) {
                         textView.setText("Redirecting");
-                        webView.loadUrl(ctrlLock ? urlCtrl : urlOpen);
-                    } else if (view.getUrl().equals(urlCtrl)) {
-                            textView.setText("in Auto lock Desicion");
-                            clickConfirm(view , stopOrAuto ? btnAutoLockOff : btnAutoLockOn);
-                            ctrlLock = false;
-                            textView.setText("Stop Auto Lock  : " +stopOrAuto );
+                        webView.loadUrl(urlOpen);
                     } else  if (view.getUrl().equals(urlOpen)) {
                             clickConfirm(view , btnOpenID);
                             textView.setText("Clicked Open");
-                        }
+                    }
                 } // end progress = 100
             } // end onProgressedChanged
             @Override

@@ -22,44 +22,44 @@
         android:text="Yet"
         android:id="@+id/textView"
         android:textSize="18dp"
-        android:layout_alignBottom="@+id/txtProgress"
+        android:layout_above="@+id/txtUrl"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignRight="@+id/webView"
+        android:layout_alignEnd="@+id/webView" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="txtUrl"
         android:id="@+id/txtUrl"
-        android:layout_alignParentStart="true"
-        android:layout_above="@+id/textView"
+        android:layout_above="@+id/btnOpen"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/webView"
+        android:layout_alignEnd="@+id/webView" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Auto Lock"
         android:id="@+id/btnAutoLock"
-        android:layout_alignParentStart="true"
         android:layout_above="@+id/btnStopAutoLock"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Stop Auto Lock"
         android:id="@+id/btnStopAutoLock"
-        android:layout_alignParentStart="true"
-        android:layout_above="@+id/btnOpen"
-        android:layout_alignParentLeft="true"
+        android:layout_above="@+id/btnSetting"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <ProgressBar
         style="?android:attr/progressBarStyleHorizontal"
@@ -79,12 +79,11 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:id="@+id/txtProgress"
         android:autoText="false"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/webView"
-        android:layout_alignEnd="@+id/webView"
-        android:layout_alignTop="@+id/progressBarCircle"
-        android:layout_alignBottom="@+id/progressBarCircle" />
+        android:layout_centerVertical="true"
+        android:layout_alignLeft="@+id/progressBarCircle"
+        android:layout_alignStart="@+id/progressBarCircle"
+        android:layout_alignRight="@+id/progressBarCircle"
+        android:layout_alignEnd="@+id/progressBarCircle" />
 
     <ProgressBar
         style="?android:attr/progressBarStyleLarge"
@@ -100,11 +99,11 @@
         android:layout_height="wrap_content"
         android:text="Open Again"
         android:id="@+id/btnOpen"
-        android:layout_above="@+id/btnSetting"
+        android:layout_above="@+id/btnAutoLock"
+        android:layout_alignRight="@+id/webView"
+        android:layout_alignEnd="@+id/webView"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentStart="true" />
 
     <Switch
         android:layout_width="wrap_content"
@@ -139,5 +138,16 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
+
+    <WebView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/webCtrlView"
+        android:visibility="invisible"
+        android:layout_centerVertical="true"
+        android:layout_alignLeft="@+id/progressBarCircle"
+        android:layout_alignStart="@+id/progressBarCircle"
+        android:layout_alignRight="@+id/progressBarCircle"
+        android:layout_alignEnd="@+id/progressBarCircle" />
 
 </RelativeLayout>

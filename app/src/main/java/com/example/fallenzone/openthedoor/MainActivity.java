@@ -27,7 +27,7 @@ public class MainActivity extends /*ActionBarActivity*/ Activity {
     private String username = "M5B01";
     private String pwd = "c@dla3";
     //private String url = "http://163.25.117.185/OGWeb/LoginForm.aspx";
-    private  Boolean stopOrAuto = null  ;
+    private  Boolean AutoLockStatus = null  ;
 
     private ProgressBar progressBar , progressBarCircle;
     private Switch switchWebView;
@@ -168,7 +168,8 @@ public class MainActivity extends /*ActionBarActivity*/ Activity {
                 if(webCtrlView.getUrl().equals(urlCtrlLock)) {
                     clickConfirm(webCtrlView, btnAutoLockOnID);
                 }else {
-                    onCtrlClick(urlCtrlLock, false);
+                    setAutoLockStatus(true);
+                    onCtrlClick(urlCtrlLock, btnAutoLockOnID);
                 }
             }
         });// end btnAutoLock
@@ -180,7 +181,8 @@ public class MainActivity extends /*ActionBarActivity*/ Activity {
                 if(webCtrlView.getUrl().equals(urlCtrlLock)) {
                     clickConfirm(webCtrlView, btnAutoLockOffID);
                 }else {
-                    onCtrlClick(urlCtrlLock, true);
+                    setAutoLockStatus(false);
+                    onCtrlClick(urlCtrlLock, btnAutoLockOffID);
                 }
             }
         }); // end btnStopAutoLock
@@ -196,35 +198,20 @@ public class MainActivity extends /*ActionBarActivity*/ Activity {
             public void onProgressChanged(WebView view, int progress) {
                 if (progress == 100) {
                     if (view.getUrl().equals(urlLogin)) {
-                        fillAccountAndPassword(view, username, pwd);
-                        clickLogin(view);
-                    }else if (view.getUrl().equals(urlDefault)) {
+                        clickLogin(fillAccountAndPassword(view, username, pwd));
+                        //clickLogin(view);
+                    }
+                    else if (view.getUrl().equals(urlDefault)) {
                         view.loadUrl(urlCtrl);
                     } else if (view.getUrl().equals(urlCtrl)) {
-//                        if(stopOrAuto) {
-//                            clickConfirm(view, btnAutoLockOffID);
-//                        }else if (!stopOrAuto){
-//                            clickConfirm(view , btnAutoLockOnID);
-//                        }
-                            clickConfirm(view , stopOrAuto ? btnAutoLockOffID : !stopOrAuto ?  btnAutoLockOnID : null );
+                        clickConfirm(view, !getAutoLockStatus() ? btnAutoLockOffID : getAutoLockStatus() ? btnAutoLockOnID : doNothing());
                     }
                 } // end progress == 100
-            }
+            } //end onProgressChanged
             @Override
             public boolean onJsAlert(WebView view, final String url, String message,
                                      JsResult result) {
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(
-                        MainActivity.this);
-                builder.setMessage(message)
-                        .setNeutralButton("OK", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface arg0, int arg1) {
-                                arg0.dismiss();
-                            }
-                        }).show();
-                result.confirm();
-                return true;
+                return handleOnJsAlert(view, url, message, result);
             }
         });
         webView.setWebChromeClient(new WebChromeClient() {
@@ -234,13 +221,9 @@ public class MainActivity extends /*ActionBarActivity*/ Activity {
                 txtProgress.setText(Integer.toString( progress ));
                 if (progress == 100) {
                     txtUrl.setText(view.getUrl());
-                    //webView.loadUrl(webView.getUrl().equals("http://163.25.117.185/OGWeb/LoginForm.aspx?ReturnUrl=%2fOGWeb%2fOGWebGuard%2fOGDOutActionPage.aspx") ?
-                     //       fillAccountAndPassword(view , username , pwd) , clickLogin(view) : clickLogin(view));
                     if (view.getUrl().equals(urlLogin)) {
-                        // Fill acount , password on web view
-                        fillAccountAndPassword(view, username, pwd);
-                        //click button on the web view
-                        clickLogin(view);
+                        // Fill acount , password on web view and click button on the web view
+                        clickLogin(fillAccountAndPassword(view, username, pwd) );
                         textView.setText("Logging");
                     }else if (view.getUrl().equals(urlDefault)) {
                         textView.setText("Redirecting");
@@ -254,32 +237,21 @@ public class MainActivity extends /*ActionBarActivity*/ Activity {
             @Override
             public boolean onJsAlert(WebView view, final String url, String message,
                                      JsResult result) {
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(
-                        MainActivity.this);
-                builder.setMessage(message)
-                        .setNeutralButton("OK", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface arg0, int arg1) {
-                                arg0.dismiss();
-                            }
-                        }).show();
-                result.confirm();
-                return true;
+                return handleOnJsAlert(view, url, message, result);
             }
+        }); // end WebChromeClient
+    } // end OnCreate
 
-        });
-    }
-    public  void onCtrlClick(String url  ,boolean stopOrAuto ){
+    public  void onCtrlClick(String url  ,String btnID ){
         //set 2 progressbar to VISIBLE
         txtProgress.setVisibility(View.VISIBLE);
         progressBarCircle.setVisibility(View.VISIBLE);
         //load to Contrl Auto Lock Web Page
-       //webView.loadUrl(url);
         webCtrlView.loadUrl(url);
-        // assign click boolean value
-        this.stopOrAuto = stopOrAuto;
     }
+
+
+
     public boolean clickDirectly(WebView view , String clickUrl , String buttonID){
         if (view.getUrl().equals(clickUrl)) {
             clickConfirm(view, buttonID);
@@ -288,11 +260,12 @@ public class MainActivity extends /*ActionBarActivity*/ Activity {
             return false;
         }
     }
-    public void fillAccountAndPassword(WebView view , String account , String password){
+    public WebView fillAccountAndPassword(WebView view , String account , String password){
         view.loadUrl("javascript:var x = document.getElementById('UserAccount').value = '" +
                 account + "';");
         view.loadUrl("javascript:var y = document.getElementById('UserPassword').value = '" +
                 password + "';");
+        return view;
       //  clickLogin(view);
     }
 
@@ -336,4 +309,30 @@ public class MainActivity extends /*ActionBarActivity*/ Activity {
         return super.onOptionsItemSelected(item);
     }
 
+    public Boolean getAutoLockStatus() {
+        return AutoLockStatus;
+    }
+
+    public void setAutoLockStatus(Boolean autoLockStatus) {
+        AutoLockStatus = autoLockStatus;
+    }
+
+    public String doNothing(){
+        return "";
+    }
+
+    public boolean handleOnJsAlert(WebView view, final String url, String message,
+                                   JsResult result){
+        AlertDialog.Builder builder = new AlertDialog.Builder(
+                MainActivity.this);
+        builder.setMessage(message)
+                .setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        arg0.dismiss();
+                    }
+                }).show();
+        result.confirm();
+        return true;
+    }
 }

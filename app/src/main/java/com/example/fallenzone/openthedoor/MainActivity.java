@@ -27,8 +27,7 @@ public class MainActivity extends /*ActionBarActivity*/ Activity {
     private String username = "M5B01";
     private String pwd = "c@dla3";
     //private String url = "http://163.25.117.185/OGWeb/LoginForm.aspx";
-    private boolean ctrlLock = false ;
-    private  boolean stopOrAuto ;
+    private  Boolean stopOrAuto = null  ;
 
     private ProgressBar progressBar , progressBarCircle;
     private Switch switchWebView;
@@ -63,8 +62,22 @@ public class MainActivity extends /*ActionBarActivity*/ Activity {
         webs.setSaveFormData(false);
         final WebSettings webCtrlSettings = webCtrlView.getSettings();
         webCtrlSettings .setDomStorageEnabled(true);
+        webCtrlView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
         webCtrlView.getSettings().setDomStorageEnabled(true);
         webCtrlView.clearCache(true);
+
+        final Activity activity = this;
+
+        webCtrlView.setWebViewClient(new WebViewClient() {
+            public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+                Toast.makeText(activity, description, Toast.LENGTH_SHORT).show();
+            }
+        });
+        webView.setWebViewClient(new WebViewClient() {
+            public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+                Toast.makeText(activity, description, Toast.LENGTH_SHORT).show();
+            }
+        });
 
 
 
@@ -96,12 +109,8 @@ public class MainActivity extends /*ActionBarActivity*/ Activity {
         txtaccout.setText(login.getAccount());
 
 
-        final Activity activity = this;
-        webView.setWebViewClient(new WebViewClient() {
-            public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
-                Toast.makeText(activity, description, Toast.LENGTH_SHORT).show();
-            }
-        });
+
+
 
         webView.loadUrl("http://163.25.117.185/OGWeb/OGWebGuard/OGDOutActionPage.aspx");
         webCtrlView.loadUrl("http://163.25.117.185/OGWeb/OGWebGuard/OGDOutActionPage.aspx");
@@ -150,7 +159,8 @@ public class MainActivity extends /*ActionBarActivity*/ Activity {
             public void onClick(View v) {
                 // Perform action on click
                 if (!clickDirectly(webView, urlOpen, btnOpenID))
-                    onCtrlClick(urlOpen, false, false);
+                    webView.loadUrl(urlOpen);
+                    //onCtrlClick(urlOpen, false);
             }
         }); // end btnStopAutoLock
         btnAutoLock.setOnClickListener(new View.OnClickListener() {
@@ -158,7 +168,7 @@ public class MainActivity extends /*ActionBarActivity*/ Activity {
                 if(webCtrlView.getUrl().equals(urlCtrlLock)) {
                     clickConfirm(webCtrlView, btnAutoLockOnID);
                 }else {
-                    onCtrlClick(urlCtrlLock, true, false);
+                    onCtrlClick(urlCtrlLock, false);
                 }
             }
         });// end btnAutoLock
@@ -170,7 +180,7 @@ public class MainActivity extends /*ActionBarActivity*/ Activity {
                 if(webCtrlView.getUrl().equals(urlCtrlLock)) {
                     clickConfirm(webCtrlView, btnAutoLockOffID);
                 }else {
-                    onCtrlClick(urlCtrlLock, true, true);
+                    onCtrlClick(urlCtrlLock, true);
                 }
             }
         }); // end btnStopAutoLock
@@ -191,7 +201,12 @@ public class MainActivity extends /*ActionBarActivity*/ Activity {
                     }else if (view.getUrl().equals(urlDefault)) {
                         view.loadUrl(urlCtrl);
                     } else if (view.getUrl().equals(urlCtrl)) {
-                        clickConfirm(view , stopOrAuto ? btnAutoLockOffID : btnAutoLockOnID);
+//                        if(stopOrAuto) {
+//                            clickConfirm(view, btnAutoLockOffID);
+//                        }else if (!stopOrAuto){
+//                            clickConfirm(view , btnAutoLockOnID);
+//                        }
+                            clickConfirm(view , stopOrAuto ? btnAutoLockOffID : !stopOrAuto ?  btnAutoLockOnID : null );
                     }
                 } // end progress == 100
             }
@@ -255,7 +270,7 @@ public class MainActivity extends /*ActionBarActivity*/ Activity {
 
         });
     }
-    public  void onCtrlClick(String url , boolean ctrlLcok ,boolean stopOrAuto ){
+    public  void onCtrlClick(String url  ,boolean stopOrAuto ){
         //set 2 progressbar to VISIBLE
         txtProgress.setVisibility(View.VISIBLE);
         progressBarCircle.setVisibility(View.VISIBLE);
@@ -263,7 +278,6 @@ public class MainActivity extends /*ActionBarActivity*/ Activity {
        //webView.loadUrl(url);
         webCtrlView.loadUrl(url);
         // assign click boolean value
-        this.ctrlLock = ctrlLcok;
         this.stopOrAuto = stopOrAuto;
     }
     public boolean clickDirectly(WebView view , String clickUrl , String buttonID){

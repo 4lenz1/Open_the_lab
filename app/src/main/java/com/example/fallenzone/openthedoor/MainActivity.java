@@ -15,13 +15,14 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends /*ActionBarActivity*/ Activity {
-
+    private EditText inputAccount , inputPassword ;
     private WebView webView , webCtrlView;
     private TextView textView , txtUrl , txtProgress , txtaccout;
     private String username = "M5B01";
@@ -104,6 +105,9 @@ public class MainActivity extends /*ActionBarActivity*/ Activity {
 
 
         Login login = new Login();
+        //inputAccount = (EditText) findViewById(R.id.inputAccount);
+        //inputPassword = (EditText) findViewById(R.id.inputPassword);
+        //inputAccount.setText(username);
 
         login.setAccount(username);
         txtaccout.setText(login.getAccount());

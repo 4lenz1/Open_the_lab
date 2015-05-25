@@ -1,7 +1,6 @@
 package com.example.fallenzone.openthedoor;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -23,19 +22,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends /*ActionBarActivity*/ Activity {
-    private EditText inputAccount , inputPassword ;
     private WebView webView , webCtrlView;
     private TextView textView , txtUrl , txtProgress , txtaccout;
     private String username = "M5B01";
     private String pwd = "c@dla3";
     //private String url = "http://163.25.117.185/OGWeb/LoginForm.aspx";
-    private  Boolean AutoLockStatus = null  ;
-
+    private  boolean AutoLockStatus ;
+    private boolean firstTimeLogin = false ;
     private ProgressBar progressBar , progressBarCircle;
     private Switch switchWebView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //stamp = 0 ==>> first time
 
 
         final Button btnAutoLock , btnStopAutoLock , btnOpen , btnSetting;
@@ -170,6 +170,7 @@ public class MainActivity extends /*ActionBarActivity*/ Activity {
         }); // end btnStopAutoLock
         btnAutoLock.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                setFirstTimeLogin(false);
                 if(webCtrlView.getUrl().equals(urlCtrlLock)) {
                     clickConfirm(webCtrlView, btnAutoLockOnID);
                 }else {
@@ -181,9 +182,11 @@ public class MainActivity extends /*ActionBarActivity*/ Activity {
 
         btnStopAutoLock.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                setFirstTimeLogin(false);
                 // Perform action on click
                 //if (!clickDirectly(webview, urlCtrl , btnAutoLockOff))
                 if(webCtrlView.getUrl().equals(urlCtrlLock)) {
+
                     clickConfirm(webCtrlView, btnAutoLockOffID);
                 }else {
                     setAutoLockStatus(false);
@@ -208,8 +211,8 @@ public class MainActivity extends /*ActionBarActivity*/ Activity {
                     }
                     else if (view.getUrl().equals(urlDefault)) {
                         view.loadUrl(urlCtrl);
-                    } else if (view.getUrl().equals(urlCtrl)) {
-                        clickConfirm(view, !getAutoLockStatus() ? btnAutoLockOffID : getAutoLockStatus() ? btnAutoLockOnID : doNothing());
+                    } else if (view.getUrl().equals(urlCtrl) &&  !isFirstTimeLogin()) {
+                        clickConfirm(view, !getAutoLockStatus() ? btnAutoLockOffID :  btnAutoLockOnID );
                     }
                 } // end progress == 100
             } //end onProgressChanged
@@ -314,7 +317,7 @@ public class MainActivity extends /*ActionBarActivity*/ Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    public Boolean getAutoLockStatus() {
+    public boolean getAutoLockStatus() {
         return AutoLockStatus;
     }
 
@@ -339,5 +342,13 @@ public class MainActivity extends /*ActionBarActivity*/ Activity {
                 }).show();
         result.confirm();
         return true;
+    }
+
+    public boolean isFirstTimeLogin() {
+        return firstTimeLogin;
+    }
+
+    public void setFirstTimeLogin(boolean firstTimeLogin) {
+        this.firstTimeLogin = firstTimeLogin;
     }
 }
